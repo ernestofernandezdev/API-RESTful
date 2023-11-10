@@ -10,8 +10,7 @@
     $router->addRoute('reviews/:ID', 'GET', 'ReviewsApiController', 'get');
     $router->addRoute('reviews/:ID', 'PUT', 'ReviewsApiController', 'update');
     $router->addRoute('reviews/:ID', 'DELETE', 'ReviewsApiController', 'delete');
-    
-    // $router->addRoute('reviews/:ID/:subrecurso', 'GET', 'ReviewsApiController', 'get');
+    $router->addRoute('user/token', 'GET', 'UserApiController', 'getToken');
     
 
     $router->route($_GET['resource'], $_SERVER['REQUEST_METHOD']);

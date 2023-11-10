@@ -2,7 +2,7 @@
 
 require_once "./app/models/Model.php";
 
-class UsersModel extends Model {
+class UserModel extends Model {
 
     public function getUserByUsername($usuario) {
         $query = $this->db->prepare('SELECT * FROM usuarios WHERE usuario = ?');
