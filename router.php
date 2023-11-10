@@ -1,17 +1,17 @@
 <?php
     require_once 'config.php';
     require_once 'libs/router.php';
+    require_once './app/controllers/ReviewsApiController.php';
 
     $router = new Router();
 
-    #                 endpoint      verbo     controller           método
-    $router->addRoute('tareas',     'GET',    'TaskApiController', 'get'   );
-    $router->addRoute('tareas',     'POST',   'TaskApiController', 'create');
-    $router->addRoute('tareas/:ID', 'GET',    'TaskApiController', 'get'   );
-    $router->addRoute('tareas/:ID', 'PUT',    'TaskApiController', 'update');
-    $router->addRoute('tareas/:ID', 'DELETE', 'TaskApiController', 'delete');
+    $router->addRoute('reviews', 'GET', 'ReviewsApiController', 'get');
+    $router->addRoute('reviews', 'POST', 'ReviewsApiController', 'create');
+    $router->addRoute('reviews/:ID', 'GET', 'ReviewsApiController', 'get');
+    $router->addRoute('reviews/:ID', 'PUT', 'ReviewsApiController', 'update');
+    $router->addRoute('reviews/:ID', 'DELETE', 'ReviewsApiController', 'delete');
     
-    $router->addRoute('tareas/:ID/:subrecurso', 'GET',    'TaskApiController', 'get'   );
+    // $router->addRoute('reviews/:ID/:subrecurso', 'GET', 'ReviewsApiController', 'get');
     
 
     $router->route($_GET['resource'], $_SERVER['REQUEST_METHOD']);
