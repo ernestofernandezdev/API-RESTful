@@ -3,85 +3,20 @@ require_once "./app/models/ReviewsModel.php";
 require_once "./app/models/GamesModel.php";
 require_once "./app/models/UserModel.php";
 require_once "./app/controllers/ApiController.php";
+require_once "./app/helpers/AuthHelper.php";
 
 class ReviewsApiController extends ApiController {
     private $model;
     private $gamesModel;
     private $userModel;
+    private $authHelper;
 
     public function __construct() {
         parent::__construct();
         $this->model = new ReviewsModel();
         $this->gamesModel = new GamesModel();
         $this->userModel = new UserModel();
-    }
-
-    private function sort($reviews, $field) {
-        switch ($field) {
-            case 'descripcion':
-                usort($reviews, function($a, $b){
-                    return strcmp($a->descripcion,$b->descripcion);
-                });
-                break;
-            case 'puntuacion':
-                usort($reviews, function($a, $b){
-                    return $a->puntuacion - $b->puntuacion;
-                });
-                break;
-            case 'usuario':
-                usort($reviews, function($a, $b){
-                    return strcmp($a->usuario,$b->usuario);
-                });
-                break;
-            case 'juego':
-                usort($reviews, function($a, $b){
-                    return $a->juegoId - $b->juegoId;
-                });
-                break;
-            default:
-        }
-        
-        if (!empty($_GET["order"]) && $_GET["order"] == "desc") {
-            $reviews = array_reverse($reviews);
-        }
-
-        return $reviews;
-    }
-
-    private function filter($reviews) {
-        if (!empty($_GET["descripcion"])) {
-            for ($i=0; $i < count($reviews); $i++) { 
-                if ($reviews[$i]->descripcion != $_GET["descripcion"]) {
-                    array_splice($reviews, $i, 1);
-                }
-            }
-        }
-        
-        if (!empty($_GET["puntuacion"])) {
-            for ($i=0; $i < count($reviews); $i++) { 
-                if ($reviews[$i]->puntuacion != $_GET["puntuacion"]) {
-                    array_splice($reviews, $i, 1);
-                }
-            }
-        }
-        
-        if (!empty($_GET["usuario"])) {
-            for ($i=0; $i < count($reviews); $i++) { 
-                if ($reviews[$i]->usuario != $_GET["usuario"]) {
-                    array_splice($reviews, $i, 1);
-                }
-            }
-        }
-        
-        if (!empty($_GET["juego"])) {
-            for ($i=0; $i < count($reviews); $i++) { 
-                if ($reviews[$i]->juegoId != $_GET["juego"]) {
-                    array_splice($reviews, $i, 1);
-                }
-            }
-        }
-
-        return $reviews;
+        $this->authHelper = new AuthHelper();
     }
 
     public function get($params = []) {
@@ -130,6 +65,11 @@ class ReviewsApiController extends ApiController {
     }
 
     public function create() {
+        if ($this->authHelper->verifyRequest() == false) {
+            $this->view->response("No autorizado.", 401);
+            return;
+        }
+
         $body = $this->getData();
         
         if (empty($body->descripcion) || empty($body->puntuacion) || empty($body->usuario) || empty($body->juegoId)) {
@@ -162,6 +102,11 @@ class ReviewsApiController extends ApiController {
     }
 
     public function update($params) {
+        if ($this->authHelper->verifyRequest() == false) {
+            $this->view->response("No autorizado.", 401);
+            return;
+        }
+
         $reviewId = $params[":ID"];
 
         if (empty($this->model->getReviewById($reviewId))) {
@@ -201,6 +146,11 @@ class ReviewsApiController extends ApiController {
     }
 
     public function delete($params) {
+        if ($this->authHelper->verifyRequest() == false) {
+            $this->view->response("No autorizado.", 401);
+            return;
+        }
+
         $reviewId = $params[":ID"];
 
         if (empty($this->model->getReviewById($reviewId))) {
@@ -210,5 +160,83 @@ class ReviewsApiController extends ApiController {
 
         $this->model->deleteReview($reviewId);
         $this->view->response("Recurso eliminado con éxito.", 200);
+    }
+
+
+
+
+    
+
+    private function sort($reviews, $field) {
+        switch ($field) {
+            case 'descripcion':
+                usort($reviews, function($a, $b){
+                    return strcmp($a->descripcion,$b->descripcion);
+                });
+                break;
+            case 'puntuacion':
+                usort($reviews, function($a, $b){
+                    return $a->puntuacion - $b->puntuacion;
+                });
+                break;
+            case 'usuario':
+                usort($reviews, function($a, $b){
+                    return strcmp($a->usuario,$b->usuario);
+                });
+                break;
+            case 'juego':
+                usort($reviews, function($a, $b){
+                    return $a->juegoId - $b->juegoId;
+                });
+                break;
+            default:
+        }
+        
+        if (!empty($_GET["order"]) && $_GET["order"] == "desc") {
+            $reviews = array_reverse($reviews);
+        }
+
+        return $reviews;
+    }
+
+    private function filter($reviews) {
+        if (!empty($_GET["descripcion"])) {
+            for ($i=0; $i < count($reviews); $i++) { 
+                if ($reviews[$i]->descripcion != $_GET["descripcion"]) {
+                    array_splice($reviews, $i, 1);
+                    $i--;
+                }
+            }
+        }
+        
+        if (!empty($_GET["puntuacion"])) {
+            for ($i=0; $i < count($reviews); $i++) { 
+                var_dump($i);
+                if ($reviews[$i]->puntuacion != $_GET["puntuacion"]) {
+                    array_splice($reviews, $i, 1);
+                    $i--;
+                }
+            }
+        }
+        
+        if (!empty($_GET["usuario"])) {
+            for ($i=0; $i < count($reviews); $i++) { 
+                if ($reviews[$i]->usuario != $_GET["usuario"]) {
+                    array_splice($reviews, $i, 1);
+                    $i--;
+                }
+            }
+        }
+        
+        if (!empty($_GET["juego"])) {
+            for ($i=0; $i < count($reviews); $i++) { 
+                if ($reviews[$i]->juegoId != $_GET["juego"]) {
+                    array_splice($reviews, $i, 1);
+                    $i--;
+                }
+            }
+        }
+
+        return $reviews;
     }
 }
