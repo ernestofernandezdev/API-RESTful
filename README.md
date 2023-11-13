@@ -32,7 +32,7 @@ Para utilizar los endpoints de POST, PUT y DELETE primero necesitamos un token q
 
 "Authorization": "Basic d2ViYWRtaW46YWRtaW4="
 
-("d2ViYWRtaW46YWRtaW4=" es "user:pass" codificado en base 64, donde este "user" y "pass" son un usuario y contraseña existentes en la base de datos. El usuario por defecto es "webadmin" y la contraseña "admin").
+("d2ViYWRtaW46YWRtaW4=" es "user:pass" codificado en base 64, donde este "user" y "pass" son un usuario y contraseña existentes en la base de datos. El usuario por defecto es "webadmin" y la contraseña "admin", y con estos datos se obtuvo el código "d2ViYWRtaW46YWRtaW4=").
 Luego, cuando queramos hacer un POST/PUT/DELETE debemos utilizar el siguiente header:
 
 "Authorization": "Bearer (token)"
