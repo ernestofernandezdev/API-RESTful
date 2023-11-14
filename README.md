@@ -40,6 +40,7 @@ Luego, cuando queramos hacer un POST/PUT/DELETE debemos utilizar el siguiente he
 El endpoint 1 también nos permite filtrar y ordenar los resultados obtenidos. Para filtrar utilizamos endpoints como los siguientes:
 
 http://localhost/API-RESTful/api/reviews?puntuacion=4
+
 http://localhost/API-RESTful/api/reviews?usuario=webadmin
 
 Por último, para ordenar los elementos utilizamos:
